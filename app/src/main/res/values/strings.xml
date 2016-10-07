@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">VS_fabischn_AntiTheft</string>
+    <string name="toggle_activate">Activate Alarm</string>
+    <string name="toggle_deactivate">Deactivate</string>
 </resources>
