@@ -20,7 +20,7 @@ public class SpikeMovementDetector extends AbstractMovementDetector {
         //printValues(values);
         float sum = absSum(values);
         Log.d("Abs Sum", sum + "");
-        return (sum > this.thresh);
+        return (sum >= this.thresh);
     }
 
     private float absSum(float[] values) {

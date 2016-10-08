@@ -2,6 +2,7 @@ package ch.ethz.inf.vs.a1.fabischn.antitheft;
 
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        registerReceiver(new UnlockReceiver(), new IntentFilter("android.intent.action.USER_PRESENT"));
     }
 
     public void onClickToggle (View v) {
