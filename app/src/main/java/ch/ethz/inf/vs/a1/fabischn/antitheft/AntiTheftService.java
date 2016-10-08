@@ -2,6 +2,9 @@ package ch.ethz.inf.vs.a1.fabischn.antitheft;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -10,10 +13,20 @@ public class AntiTheftService extends IntentService implements  AlarmCallback {
         super("AntiTheftThread");
     }
 
+    private SpikeMovementDetector spike = null;
+    private SensorManager sensorManager = null;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.d("Hadsfkjl", "1");
+        spike = new SpikeMovementDetector(this, 10);
+        sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        Sensor accSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
+        sensorManager.registerListener(spike, accSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        Log.d("Hadsfkjl", "2");
+
+
     }
 
     @Override
@@ -30,12 +43,18 @@ public class AntiTheftService extends IntentService implements  AlarmCallback {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.d("Hello", "1");
-
+        Log.d("Hallo", "Olivier");
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Log.d("Service", "Exit");
+        sensorManager.unregisterListener(spike);
     }
 
     @Override
     public void onDelayStarted() {
-
+        Log.d("ALARM!!!", "ALARM!!!");
     }
 }
