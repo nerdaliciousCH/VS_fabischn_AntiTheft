@@ -1,6 +1,10 @@
 package ch.ethz.inf.vs.a1.fabischn.antitheft;
 
 import android.app.IntentService;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
+import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
@@ -8,6 +12,7 @@ import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.provider.MediaStore;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 public class AntiTheftService extends IntentService implements  AlarmCallback {
@@ -62,8 +67,22 @@ public class AntiTheftService extends IntentService implements  AlarmCallback {
     @Override
     protected void onHandleIntent(Intent intent) {
         Log.d("Service", "Start");
+        String TAG = "AntiStealthNotification";
+        int NOTIFICATION_ID = 1;
+        NotificationCompat.Builder builder =
+                (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_info_black_24dp)
+                .setContentTitle("Anti-Theft Alarm")
+                .setContentText("Activated");
+        builder.setOngoing(true);
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(TAG, NOTIFICATION_ID, builder.build());
+
+
         while (isRunning()){}
         mp.stop();
+        notificationManager.cancel(TAG, NOTIFICATION_ID);
         Log.d("Service", "Stop");
 
 
