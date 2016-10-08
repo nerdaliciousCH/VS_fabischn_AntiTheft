@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.IBinder;
+import android.provider.MediaStore;
 import android.util.Log;
 
 public class AntiTheftService extends IntentService implements  AlarmCallback {
@@ -15,6 +17,7 @@ public class AntiTheftService extends IntentService implements  AlarmCallback {
 
     private SpikeMovementDetector spike = null;
     private SensorManager sensorManager = null;
+    private MediaPlayer mp = null;
 
     public static synchronized boolean isRunning() {
         return running;
@@ -35,6 +38,10 @@ public class AntiTheftService extends IntentService implements  AlarmCallback {
         sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         Sensor accSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         sensorManager.registerListener(spike, accSensor, SensorManager.SENSOR_DELAY_NORMAL);
+
+        mp = MediaPlayer.create(this, R.raw.alarm);
+        mp.setVolume(1.0f, 1.0f);
+        mp.setLooping(true);
         Log.d("Hadsfkjl", "2");
 
 
@@ -56,6 +63,7 @@ public class AntiTheftService extends IntentService implements  AlarmCallback {
     protected void onHandleIntent(Intent intent) {
         Log.d("Service", "Start");
         while (isRunning()){}
+        mp.stop();
         Log.d("Service", "Stop");
 
 
@@ -65,6 +73,7 @@ public class AntiTheftService extends IntentService implements  AlarmCallback {
     @Override
     public void onDelayStarted() {
         Log.d("ALARM!!!", "ALARM!!!");
+        mp.start();
 
     }
 }
