@@ -29,10 +29,12 @@ public class MainActivity extends AppCompatActivity{
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
 
         if (tb.isChecked()) {
+            AntiTheftService.setRunning(true);
             startService(intent);
             tb.setText(R.string.toggle_deactivate);
         }
         else {
+            AntiTheftService.setRunning(false);
             tb.setText(R.string.toggle_activate);
         }
 

@@ -16,6 +16,17 @@ public class AntiTheftService extends IntentService implements  AlarmCallback {
     private SpikeMovementDetector spike = null;
     private SensorManager sensorManager = null;
 
+    public static synchronized boolean isRunning() {
+        return running;
+    }
+
+    public static synchronized void setRunning(boolean running) {
+        AntiTheftService.running = running;
+    }
+
+    private static boolean running = false;
+
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -43,18 +54,17 @@ public class AntiTheftService extends IntentService implements  AlarmCallback {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.d("Hallo", "Olivier");
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        Log.d("Service", "Exit");
+        Log.d("Service", "Start");
+        while (isRunning()){}
+        Log.d("Service", "Stop");
+
+
         sensorManager.unregisterListener(spike);
     }
 
     @Override
     public void onDelayStarted() {
         Log.d("ALARM!!!", "ALARM!!!");
+
     }
 }
