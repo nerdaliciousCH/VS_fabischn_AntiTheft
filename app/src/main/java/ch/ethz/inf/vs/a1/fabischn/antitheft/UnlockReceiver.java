@@ -13,8 +13,11 @@ public class UnlockReceiver extends BroadcastReceiver{
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d("Unlocked!", "Yay");
-        AntiTheftService.setRunning(false);
+
         MainActivity.setToggleButton(false);
+        Log.d("Unlocked!", "After Toggle");
+
+        AntiTheftService.setRunning(false);
         Log.d("After unlock", "");
 
     }

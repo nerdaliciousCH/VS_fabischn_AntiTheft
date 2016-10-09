@@ -8,4 +8,10 @@
         android:key="pref_delay"
         android:title="@string/pref_delay"
         android:defaultValue="false"/>
+    <ch.ethz.inf.vs.a1.fabischn.antitheft.SeekbarPreference
+        android:key="pref_max_volume"
+        android:title="@string/pref_sensitivity" />
+    <ch.ethz.inf.vs.a1.fabischn.antitheft.SeekbarPreference
+        android:key="pref_balance"
+        android:title="@string/pref_delay" />
 </PreferenceScreen>
