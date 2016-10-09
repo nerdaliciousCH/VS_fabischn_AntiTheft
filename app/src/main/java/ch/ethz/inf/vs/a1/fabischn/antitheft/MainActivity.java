@@ -14,15 +14,43 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ToggleButton;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
 
-    public static ToggleButton tb = null;
+
+
+    public static synchronized void setToggleButton(boolean b) {
+        tb.setChecked(b);
+    }
+
+    private static ToggleButton tb = null;
+    private UnlockReceiver unlockReceiver = null;
+
+    private final String SENSITIVITY_PREFERENCE = "pref_sensitivity";
+    private final String DELAY_PREFERENCE = "pref_delay";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        registerReceiver(new UnlockReceiver(), new IntentFilter("android.intent.action.USER_PRESENT"));
+        unlockReceiver = new UnlockReceiver();
+        registerReceiver(unlockReceiver, new IntentFilter("android.intent.action.USER_PRESENT"));
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .registerOnSharedPreferenceChangeListener(this);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(unlockReceiver, new IntentFilter("android.intent.action.USER_PRESENT"));
+
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(this.unlockReceiver);
     }
 
     public void onClickToggle (View v) {
@@ -51,8 +79,6 @@ public class MainActivity extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-
-
         Intent intent = new Intent(this, SettingsActivity.class);
         intent.putExtra("name", "Olivier");
 
@@ -67,5 +93,17 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        if (key.equals(this.SENSITIVITY_PREFERENCE)) {
+            boolean bool = sharedPref.getBoolean(SENSITIVITY_PREFERENCE, true);
+            Log.d("Sensitivity is:", bool + "");
+        }
+        else if (key.equals(this.DELAY_PREFERENCE)) {
+            boolean bool = sharedPref.getBoolean(DELAY_PREFERENCE, true);
+            Log.d("Delay is:", bool + "");
+        }
 
+    }
 }

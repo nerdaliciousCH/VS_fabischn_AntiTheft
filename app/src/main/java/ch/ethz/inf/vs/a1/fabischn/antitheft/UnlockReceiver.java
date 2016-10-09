@@ -14,7 +14,8 @@ public class UnlockReceiver extends BroadcastReceiver{
     public void onReceive(Context context, Intent intent) {
         Log.d("Unlocked!", "Yay");
         AntiTheftService.setRunning(false);
-        MainActivity.tb.setChecked(false);
+        MainActivity.setToggleButton(false);
+        Log.d("After unlock", "");
 
     }
 }
