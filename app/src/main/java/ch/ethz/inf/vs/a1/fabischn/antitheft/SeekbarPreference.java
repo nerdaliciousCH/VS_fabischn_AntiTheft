@@ -8,9 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 
 public class SeekbarPreference extends Preference implements OnSeekBarChangeListener {
     private SeekBar mSeekBar;
+    private TextView description;
     private int mProgress;
 
     public SeekbarPreference(Context context) {
@@ -27,26 +29,20 @@ public class SeekbarPreference extends Preference implements OnSeekBarChangeList
     }
 
 
-    @Override
-    protected View onCreateView(ViewGroup parent) {
-        return super.onCreateView(parent);
 
-    }
 
     @Override
     protected void onBindView(View view) {
         super.onBindView(view);
         mSeekBar = (SeekBar) view.findViewById(R.id.seekbar);
+        
         mSeekBar.setProgress(mProgress);
         mSeekBar.setOnSeekBarChangeListener(this);
     }
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        if (!fromUser)
-            return;
 
-        setValue(progress);
     }
 
     @Override
