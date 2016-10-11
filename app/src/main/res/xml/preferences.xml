@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <CheckBoxPreference
-        android:key="pref_sensitivity"
-        android:title="@string/pref_sensitivity"
-        android:defaultValue="true"/>
-    <CheckBoxPreference
-        android:key="pref_delay"
-        android:title="@string/pref_delay"
-        android:defaultValue="false"/>
+
     <ch.ethz.inf.vs.a1.fabischn.antitheft.SeekbarPreference
         android:key="pref_max_volume"
         android:title="@string/pref_sensitivity" />
