@@ -46,10 +46,7 @@ public class AntiTheftService extends IntentService implements  AlarmCallback {
         super.onCreate();
 
 
-        spike = new SpikeMovementDetector(this, this.sensitivity);
-        sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        Sensor accSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
-        sensorManager.registerListener(spike, accSensor, SensorManager.SENSOR_DELAY_NORMAL);
+
 
         mp = MediaPlayer.create(this, R.raw.alarm);
         mp.setVolume(1.0f, 1.0f);
@@ -75,8 +72,15 @@ public class AntiTheftService extends IntentService implements  AlarmCallback {
     @Override
     protected void onHandleIntent(Intent intent) {
         this.sensitivity = intent.getIntExtra(getResources().getString(R.string.pref_sensitivity), 10);
-        this.spike = new SpikeMovementDetector(this, this.sensitivity);
+        this.delay       = intent.getIntExtra(getResources().getString(R.string.pref_delay), 0);
+
+        spike = new SpikeMovementDetector(this, this.sensitivity);
+        sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        Sensor accSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
+        sensorManager.registerListener(spike, accSensor, SensorManager.SENSOR_DELAY_NORMAL);
+
         Log.d("Service", "Start");
+
         String TAG = "AntiStealthNotification";
         int NOTIFICATION_ID = 1;
         NotificationCompat.Builder builder =
@@ -101,6 +105,11 @@ public class AntiTheftService extends IntentService implements  AlarmCallback {
 
     @Override
     public void onDelayStarted() {
+        try {
+            Thread.sleep(this.delay * 1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Log.d("ALARM!!!", "ALARM!!!");
         mp.start();
 

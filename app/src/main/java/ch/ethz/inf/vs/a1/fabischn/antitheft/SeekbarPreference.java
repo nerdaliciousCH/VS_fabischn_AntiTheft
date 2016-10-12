@@ -17,6 +17,13 @@ public class SeekbarPreference extends Preference implements OnSeekBarChangeList
     private TextView seekBarValue;
     private int mProgress;
     private String DESCRIPTION_TEXT = "";
+    private static int seekbarMaxValue;
+
+
+    public static int getSeekbarMaxValue() {
+        return seekbarMaxValue;
+    }
+
 
     public SeekbarPreference(Context context) {
         this(context, null, 0);
@@ -42,6 +49,7 @@ public class SeekbarPreference extends Preference implements OnSeekBarChangeList
     protected void onBindView(View view) {
         super.onBindView(view);
         mSeekBar = (SeekBar) view.findViewById(R.id.seekbar);
+        this.seekbarMaxValue = mSeekBar.getMax();
         description = (TextView) view.findViewById(R.id.description);
         seekBarValue = (TextView) view.findViewById(R.id.SeekbarValue);
         description.setText(this.DESCRIPTION_TEXT);

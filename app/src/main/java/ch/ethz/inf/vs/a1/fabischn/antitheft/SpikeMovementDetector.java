@@ -14,7 +14,7 @@ public class SpikeMovementDetector extends AbstractMovementDetector {
 
     public SpikeMovementDetector(AlarmCallback callback, int sensitivity) {
         super(callback, sensitivity);
-        this.thresh = this.sensitivity;
+        this.thresh = SeekbarPreference.getSeekbarMaxValue() - this.sensitivity;
     }
 
     @Override
