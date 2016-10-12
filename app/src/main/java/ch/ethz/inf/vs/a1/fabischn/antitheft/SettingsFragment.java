@@ -17,12 +17,13 @@ public class SettingsFragment extends PreferenceFragment {
 
 
         addPreferencesFromResource(R.xml.preferences);
-        sensitivity_pref = (SeekbarPreference) findPreference("Sensitivity");
-        sensitivity_pref.setDescription("Sensitivity: ");
+        String sensitivity = getString(R.string.pref_sensitivity);
+        String delay       = getString(R.string.pref_delay);
+        sensitivity_pref   = (SeekbarPreference) findPreference(sensitivity);
+        delay_pref         = (SeekbarPreference) findPreference(delay);
 
-        delay_pref = (SeekbarPreference) findPreference("Delay Time");
-
-        delay_pref.setDescription("Delay-Time: ");
+        sensitivity_pref.setDescription(sensitivity + ":");
+        delay_pref.setDescription(delay + ":");
     }
 
 

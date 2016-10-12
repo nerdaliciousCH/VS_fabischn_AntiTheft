@@ -56,8 +56,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onClickToggle (View v) {
         tb = (ToggleButton) v;
         Intent intent = new Intent(this, AntiTheftService.class);
-        
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
 
         if (tb.isChecked()) {
             AntiTheftService.setRunning(true);
