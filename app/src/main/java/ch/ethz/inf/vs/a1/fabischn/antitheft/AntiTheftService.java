@@ -19,7 +19,7 @@ import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 
-public class AntiTheftService extends IntentService implements  AlarmCallback, SharedPreferences.OnSharedPreferenceChangeListener {
+public class AntiTheftService extends IntentService implements  AlarmCallback {
     public AntiTheftService() {
         super("AntiTheftThread");
     }
@@ -44,11 +44,8 @@ public class AntiTheftService extends IntentService implements  AlarmCallback, S
     @Override
     public void onCreate() {
         super.onCreate();
-        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
-        String tag = getResources().getString(R.string.pref_sensitivity);
-        int sensitivity = getSharedPreferences(tag, Context.MODE_PRIVATE).getInt(tag, 10);
 
-        Log.d("Sensitivity is: ", sensitivity + "");
+
         spike = new SpikeMovementDetector(this, this.sensitivity);
         sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         Sensor accSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
@@ -77,6 +74,8 @@ public class AntiTheftService extends IntentService implements  AlarmCallback, S
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        this.sensitivity = intent.getIntExtra(getResources().getString(R.string.pref_sensitivity), 10);
+        this.spike = new SpikeMovementDetector(this, this.sensitivity);
         Log.d("Service", "Start");
         String TAG = "AntiStealthNotification";
         int NOTIFICATION_ID = 1;
@@ -108,19 +107,4 @@ public class AntiTheftService extends IntentService implements  AlarmCallback, S
     }
 
 
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        if (key.equals("Sensitivity")) {
-            this.sensitivity = sharedPref.getInt(key, 10);
-            this.spike.setThresh(sensitivity);
-            Log.d("Sensitivity is:", this.sensitivity + "");
-        }
-        else if (key.equals("Delay Time")) {
-            this.delay = sharedPref.getInt(key, 10);
-            Log.d("Delay Time is:", this.delay + "");
-        }
-
-    }
 }

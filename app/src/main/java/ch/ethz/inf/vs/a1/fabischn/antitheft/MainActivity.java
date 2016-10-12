@@ -25,12 +25,17 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private static ToggleButton tb = null;
     private UnlockReceiver unlockReceiver = null;
 
-    private final String SENSITIVITY_PREFERENCE = "pref_sensitivity";
-    private final String DELAY_PREFERENCE = "pref_delay";
+    private String SENSITIVITY_PREFERENCE;
+    private String DELAY_PREFERENCE;
+
+    private int sensitivity = 10;
+    private int delay = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.SENSITIVITY_PREFERENCE = getResources().getString(R.string.pref_sensitivity);
+        this.DELAY_PREFERENCE = getResources().getString(R.string.pref_delay);
         setContentView(R.layout.activity_main);
         unlockReceiver = new UnlockReceiver();
         registerReceiver(unlockReceiver, new IntentFilter("android.intent.action.USER_PRESENT"));
@@ -51,11 +56,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     protected void onPause() {
         super.onPause();
         unregisterReceiver(this.unlockReceiver);
+        //PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
     }
 
     public void onClickToggle (View v) {
         tb = (ToggleButton) v;
         Intent intent = new Intent(this, AntiTheftService.class);
+        intent.putExtra(this.SENSITIVITY_PREFERENCE, this.sensitivity);
+        intent.putExtra(this.DELAY_PREFERENCE, this.delay);
 
         if (tb.isChecked()) {
             AntiTheftService.setRunning(true);
@@ -96,12 +104,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         if (key.equals(this.SENSITIVITY_PREFERENCE)) {
-            boolean bool = sharedPref.getBoolean(SENSITIVITY_PREFERENCE, true);
-            Log.d("Sensitivity is:", bool + "");
+            this.sensitivity = sharedPref.getInt(key, 10);
+            Log.d("Sensitivity is:", this.sensitivity + "");
         }
         else if (key.equals(this.DELAY_PREFERENCE)) {
-            boolean bool = sharedPref.getBoolean(DELAY_PREFERENCE, true);
-            Log.d("Delay is:", bool + "");
+            this.delay = sharedPref.getInt(key, 10);
+            Log.d("Delay Time is:", this.delay + "");
         }
 
     }
