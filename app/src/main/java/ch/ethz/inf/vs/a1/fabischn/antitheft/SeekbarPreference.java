@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.preference.Preference;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
@@ -14,6 +15,7 @@ public class SeekbarPreference extends Preference implements OnSeekBarChangeList
     private SeekBar mSeekBar;
     private TextView description;
     private int mProgress;
+    private String DESCRIPTION_TEXT = "";
 
     public SeekbarPreference(Context context) {
         this(context, null, 0);
@@ -29,13 +31,18 @@ public class SeekbarPreference extends Preference implements OnSeekBarChangeList
     }
 
 
+    public void setDescription (String str) {
+        this.DESCRIPTION_TEXT = str;
+    }
+
 
 
     @Override
     protected void onBindView(View view) {
         super.onBindView(view);
         mSeekBar = (SeekBar) view.findViewById(R.id.seekbar);
-        
+        description = (TextView) view.findViewById(R.id.description);
+        description.setText(this.DESCRIPTION_TEXT);
         mSeekBar.setProgress(mProgress);
         mSeekBar.setOnSeekBarChangeListener(this);
     }
@@ -52,7 +59,7 @@ public class SeekbarPreference extends Preference implements OnSeekBarChangeList
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-        // not used
+
     }
 
     @Override
@@ -70,6 +77,7 @@ public class SeekbarPreference extends Preference implements OnSeekBarChangeList
             notifyChanged();
         }
     }
+
 
     @Override
     protected Object onGetDefaultValue(TypedArray a, int index) {
