@@ -27,7 +27,7 @@ public class AntiTheftService extends IntentService implements  AlarmCallback, S
     private SpikeMovementDetector spike = null;
     private SensorManager sensorManager = null;
     private MediaPlayer mp = null;
-    private int sensitivity = 0;
+    private int sensitivity = 10;
     private int delay = 0;
 
     public static synchronized boolean isRunning() {
@@ -46,10 +46,10 @@ public class AntiTheftService extends IntentService implements  AlarmCallback, S
         super.onCreate();
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
         String tag = getResources().getString(R.string.pref_sensitivity);
-        int sensitivity = getSharedPreferences(tag, Context.MODE_PRIVATE).getInt(tag, 2);
+        int sensitivity = getSharedPreferences(tag, Context.MODE_PRIVATE).getInt(tag, 10);
 
         Log.d("Sensitivity is: ", sensitivity + "");
-        spike = new SpikeMovementDetector(this, 10);
+        spike = new SpikeMovementDetector(this, this.sensitivity);
         sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         Sensor accSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         sensorManager.registerListener(spike, accSensor, SensorManager.SENSOR_DELAY_NORMAL);
@@ -111,12 +111,16 @@ public class AntiTheftService extends IntentService implements  AlarmCallback, S
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Log.d("Preference Changed", key);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         if (key.equals("Sensitivity")) {
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-            this.sensitivity = sharedPref.getInt("Sensitivity", 2);
-            Log.d("Sensitivity is:", sensitivity + "");
-            stopSelf();
+            this.sensitivity = sharedPref.getInt(key, 10);
+            this.spike.setThresh(sensitivity);
+            Log.d("Sensitivity is:", this.sensitivity + "");
         }
+        else if (key.equals("Delay Time")) {
+            this.delay = sharedPref.getInt(key, 10);
+            Log.d("Delay Time is:", this.delay + "");
+        }
+
     }
 }
