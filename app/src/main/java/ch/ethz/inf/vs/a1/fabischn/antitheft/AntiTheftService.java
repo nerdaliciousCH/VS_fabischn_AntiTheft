@@ -24,7 +24,7 @@ public class AntiTheftService extends IntentService implements  AlarmCallback {
         super("AntiTheftThread");
     }
 
-    private SpikeMovementDetector spike = null;
+    public static SpikeMovementDetector spike = null;
     private SensorManager sensorManager = null;
     private MediaPlayer mp = null;
     private int sensitivity = 10;
@@ -45,15 +45,9 @@ public class AntiTheftService extends IntentService implements  AlarmCallback {
     public void onCreate() {
         super.onCreate();
 
-
-
-
         mp = MediaPlayer.create(this, R.raw.alarm);
         mp.setVolume(1.0f, 1.0f);
         mp.setLooping(true);
-
-
-
 
     }
 
@@ -98,7 +92,6 @@ public class AntiTheftService extends IntentService implements  AlarmCallback {
         mp.stop();
         notificationManager.cancel(TAG, NOTIFICATION_ID);
         Log.d("Service", "Stop");
-
 
         sensorManager.unregisterListener(spike);
     }

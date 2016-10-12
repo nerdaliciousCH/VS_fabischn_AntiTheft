@@ -1,6 +1,7 @@
 package ch.ethz.inf.vs.a1.fabischn.antitheft;
 
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -36,11 +37,16 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         super.onCreate(savedInstanceState);
         this.SENSITIVITY_PREFERENCE = getResources().getString(R.string.pref_sensitivity);
         this.DELAY_PREFERENCE = getResources().getString(R.string.pref_delay);
+
         setContentView(R.layout.activity_main);
         unlockReceiver = new UnlockReceiver();
         registerReceiver(unlockReceiver, new IntentFilter("android.intent.action.USER_PRESENT"));
+        this.sensitivity = PreferenceManager.getDefaultSharedPreferences(this).getInt(this.SENSITIVITY_PREFERENCE, 5);
+        this.delay       = PreferenceManager.getDefaultSharedPreferences(this).getInt(this.DELAY_PREFERENCE, 2);
         PreferenceManager.getDefaultSharedPreferences(this)
                 .registerOnSharedPreferenceChangeListener(this);
+
+
 
     }
 
@@ -61,9 +67,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     public void onClickToggle (View v) {
         tb = (ToggleButton) v;
+
         Intent intent = new Intent(this, AntiTheftService.class);
         intent.putExtra(this.SENSITIVITY_PREFERENCE, this.sensitivity);
         intent.putExtra(this.DELAY_PREFERENCE, this.delay);
+
+
 
         if (tb.isChecked()) {
             AntiTheftService.setRunning(true);
@@ -76,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -106,11 +117,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         if (key.equals(this.SENSITIVITY_PREFERENCE)) {
             this.sensitivity = sharedPref.getInt(key, 10);
             Log.d("Sensitivity is:", this.sensitivity + "");
+            if (AntiTheftService.spike != null)
+                AntiTheftService.spike.setThreshFromSensitivity(this.sensitivity);
         }
         else if (key.equals(this.DELAY_PREFERENCE)) {
             this.delay = sharedPref.getInt(key, 10);
             Log.d("Delay Time is:", this.delay + "");
         }
+        //restartService();
 
     }
 }

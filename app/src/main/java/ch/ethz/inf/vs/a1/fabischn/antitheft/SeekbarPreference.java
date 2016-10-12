@@ -17,7 +17,7 @@ public class SeekbarPreference extends Preference implements OnSeekBarChangeList
     private TextView seekBarValue;
     private int mProgress;
     private String DESCRIPTION_TEXT = "";
-    private static int seekbarMaxValue;
+    private static int seekbarMaxValue = 20;
     private int defaultValue;
 
 
@@ -37,6 +37,7 @@ public class SeekbarPreference extends Preference implements OnSeekBarChangeList
     public SeekbarPreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         setLayoutResource(R.layout.seekbar_preference);
+
     }
 
 
