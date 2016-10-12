@@ -1,5 +1,6 @@
 package ch.ethz.inf.vs.a1.fabischn.antitheft;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +14,8 @@ public class SettingsActivity extends AppCompatActivity {
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
+        int sens = getPreferences(Context.MODE_PRIVATE).getInt("Sensitivity", 2);
+        Log.d("Sensitivity is", sens + "");
     }
 
     @Override

@@ -6,16 +6,20 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
+import android.media.audiofx.BassBoost;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
-public class AntiTheftService extends IntentService implements  AlarmCallback {
+
+public class AntiTheftService extends IntentService implements  AlarmCallback, SharedPreferences.OnSharedPreferenceChangeListener {
     public AntiTheftService() {
         super("AntiTheftThread");
     }
@@ -23,6 +27,8 @@ public class AntiTheftService extends IntentService implements  AlarmCallback {
     private SpikeMovementDetector spike = null;
     private SensorManager sensorManager = null;
     private MediaPlayer mp = null;
+    private int sensitivity = 0;
+    private int delay = 0;
 
     public static synchronized boolean isRunning() {
         return running;
@@ -38,7 +44,11 @@ public class AntiTheftService extends IntentService implements  AlarmCallback {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d("Hadsfkjl", "1");
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
+        String tag = getResources().getString(R.string.pref_sensitivity);
+        int sensitivity = getSharedPreferences(tag, Context.MODE_PRIVATE).getInt(tag, 2);
+
+        Log.d("Sensitivity is: ", sensitivity + "");
         spike = new SpikeMovementDetector(this, 10);
         sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         Sensor accSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
@@ -47,7 +57,8 @@ public class AntiTheftService extends IntentService implements  AlarmCallback {
         mp = MediaPlayer.create(this, R.raw.alarm);
         mp.setVolume(1.0f, 1.0f);
         mp.setLooping(true);
-        Log.d("Hadsfkjl", "2");
+
+
 
 
     }
@@ -94,5 +105,18 @@ public class AntiTheftService extends IntentService implements  AlarmCallback {
         Log.d("ALARM!!!", "ALARM!!!");
         mp.start();
 
+    }
+
+
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Log.d("Preference Changed", key);
+        if (key.equals("Sensitivity")) {
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+            this.sensitivity = sharedPref.getInt("Sensitivity", 2);
+            Log.d("Sensitivity is:", sensitivity + "");
+            stopSelf();
+        }
     }
 }

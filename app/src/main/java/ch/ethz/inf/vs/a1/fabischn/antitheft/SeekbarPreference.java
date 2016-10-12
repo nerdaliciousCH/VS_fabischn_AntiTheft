@@ -74,7 +74,6 @@ public class SeekbarPreference extends Preference implements OnSeekBarChangeList
             mProgress = (Integer) defaultValue;
             persistInt(mProgress);
             }
-        //setValue(restoreValue ? getPersistedInt(mProgress) : (Integer) defaultValue);
     }
 
     public void setValue(int value) {
