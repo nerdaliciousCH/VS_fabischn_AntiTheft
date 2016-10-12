@@ -62,12 +62,19 @@ public class SeekbarPreference extends Preference implements OnSeekBarChangeList
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-
+        persistInt(this.mProgress);
     }
 
     @Override
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
-        setValue(restoreValue ? getPersistedInt(mProgress) : (Integer) defaultValue);
+        if (restoreValue) {
+            mProgress = this.getPersistedInt(10);
+            } else {
+            // Set default state from the XML attribute
+            mProgress = (Integer) defaultValue;
+            persistInt(mProgress);
+            }
+        //setValue(restoreValue ? getPersistedInt(mProgress) : (Integer) defaultValue);
     }
 
     public void setValue(int value) {
@@ -84,6 +91,7 @@ public class SeekbarPreference extends Preference implements OnSeekBarChangeList
 
     @Override
     protected Object onGetDefaultValue(TypedArray a, int index) {
+        Log.d("Default Value is:", a.getInt(index, 0) + "");
         return a.getInt(index, 0);
     }
 }
