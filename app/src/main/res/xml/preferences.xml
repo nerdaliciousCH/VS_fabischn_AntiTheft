@@ -4,9 +4,9 @@
     <ch.ethz.inf.vs.a1.fabischn.antitheft.SeekbarPreference
         android:key="@string/pref_sensitivity"
         android:title="@string/pref_sensitivity"
-        android:defaultValue="50"/>
+        android:defaultValue="10"/>
     <ch.ethz.inf.vs.a1.fabischn.antitheft.SeekbarPreference
         android:key="@string/pref_delay"
         android:title="@string/pref_delay"
-        android:defaultValue="10"/>
+        android:defaultValue="2"/>
 </PreferenceScreen>

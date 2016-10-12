@@ -18,6 +18,7 @@ public class SeekbarPreference extends Preference implements OnSeekBarChangeList
     private int mProgress;
     private String DESCRIPTION_TEXT = "";
     private static int seekbarMaxValue;
+    private int defaultValue;
 
 
     public static int getSeekbarMaxValue() {
@@ -45,14 +46,17 @@ public class SeekbarPreference extends Preference implements OnSeekBarChangeList
 
 
 
+
     @Override
     protected void onBindView(View view) {
+        Log.d("!!!!!!!", "onBindView: ");
         super.onBindView(view);
         mSeekBar = (SeekBar) view.findViewById(R.id.seekbar);
         this.seekbarMaxValue = mSeekBar.getMax();
         description = (TextView) view.findViewById(R.id.description);
         seekBarValue = (TextView) view.findViewById(R.id.SeekbarValue);
         description.setText(this.DESCRIPTION_TEXT);
+        seekBarValue.setText(mProgress + "");
         mSeekBar.setProgress(mProgress);
         mSeekBar.setOnSeekBarChangeListener(this);
     }
@@ -98,8 +102,10 @@ public class SeekbarPreference extends Preference implements OnSeekBarChangeList
 
     @Override
     protected Object onGetDefaultValue(TypedArray a, int index) {
-        Log.d("Default Value is:", a.getInt(index, 0) + "");
-        return a.getInt(index, 0);
+        this.defaultValue = a.getInt(index, 0);
+        this.mProgress = defaultValue;
+        Log.d("Default Value is:", this.defaultValue + "");
+        return this.defaultValue;
     }
 }
 
