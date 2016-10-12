@@ -20,7 +20,7 @@ public class SettingsFragment extends PreferenceFragment {
         sensitivity_pref = (SeekbarPreference) findPreference("Sensitivity");
         sensitivity_pref.setDescription("Sensitivity: ");
 
-        delay_pref = (SeekbarPreference) findPreference("delay");
+        delay_pref = (SeekbarPreference) findPreference("Delay Time");
 
         delay_pref.setDescription("Delay-Time: ");
     }

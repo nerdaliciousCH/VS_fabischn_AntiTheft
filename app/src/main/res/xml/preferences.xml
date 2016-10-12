@@ -5,6 +5,6 @@
         android:key="@string/pref_sensitivity"
         android:title="@string/pref_sensitivity" />
     <ch.ethz.inf.vs.a1.fabischn.antitheft.SeekbarPreference
-        android:key="delay"
+        android:key="@string/pref_delay"
         android:title="@string/pref_delay" />
 </PreferenceScreen>

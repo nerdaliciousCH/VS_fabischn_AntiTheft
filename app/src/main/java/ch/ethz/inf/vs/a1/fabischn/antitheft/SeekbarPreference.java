@@ -14,6 +14,7 @@ import android.widget.TextView;
 public class SeekbarPreference extends Preference implements OnSeekBarChangeListener {
     private SeekBar mSeekBar;
     private TextView description;
+    private TextView seekBarValue;
     private int mProgress;
     private String DESCRIPTION_TEXT = "";
 
@@ -42,6 +43,7 @@ public class SeekbarPreference extends Preference implements OnSeekBarChangeList
         super.onBindView(view);
         mSeekBar = (SeekBar) view.findViewById(R.id.seekbar);
         description = (TextView) view.findViewById(R.id.description);
+        seekBarValue = (TextView) view.findViewById(R.id.SeekbarValue);
         description.setText(this.DESCRIPTION_TEXT);
         mSeekBar.setProgress(mProgress);
         mSeekBar.setOnSeekBarChangeListener(this);
@@ -49,7 +51,8 @@ public class SeekbarPreference extends Preference implements OnSeekBarChangeList
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
+        mProgress = progress;
+        this.seekBarValue.setText(progress + "");
     }
 
     @Override
