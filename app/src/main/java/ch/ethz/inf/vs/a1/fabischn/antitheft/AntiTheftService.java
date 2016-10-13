@@ -12,6 +12,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.media.audiofx.BassBoost;
+import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
@@ -109,13 +110,14 @@ public class AntiTheftService extends IntentService implements  AlarmCallback {
 
     @Override
     public void onDelayStarted() {
-        try {
-            Thread.sleep(this.delay * 1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        Log.d("ALARM!!!", "ALARM!!!");
-        mp.start();
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mp.start();
+            }
+        }, this.delay * 1000);
+
 
     }
 
