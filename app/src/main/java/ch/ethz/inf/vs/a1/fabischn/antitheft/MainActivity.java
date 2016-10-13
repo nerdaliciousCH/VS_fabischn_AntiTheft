@@ -113,7 +113,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         switch (item.getItemId()) {
             case R.id.menu_settings:
-
+                intent.putExtra("SensitivityOnEntry", this.sensitivity);
+                intent.putExtra("DelayOnEntry", this.delay);
                 this.startActivity(intent);
                 return true;
             default:

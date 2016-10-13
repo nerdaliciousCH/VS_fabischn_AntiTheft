@@ -21,6 +21,5 @@ public class UnlockReceiver extends BroadcastReceiver{
 
         AntiTheftService.setRunning(false);
         Log.d("After unlock", "");
-
     }
 }
