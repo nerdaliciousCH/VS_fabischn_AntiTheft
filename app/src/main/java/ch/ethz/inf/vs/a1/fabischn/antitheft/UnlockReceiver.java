@@ -18,7 +18,7 @@ public class UnlockReceiver extends BroadcastReceiver{
 
         MainActivity.setToggleButton(false);
         Log.d("Unlocked!", "After Toggle");
-
+        MainActivity.tb.setText("Activate Alarm");
         AntiTheftService.setRunning(false);
         Log.d("After unlock", "");
     }

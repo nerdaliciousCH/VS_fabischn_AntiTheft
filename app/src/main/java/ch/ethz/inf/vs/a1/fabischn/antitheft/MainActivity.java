@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
 
 
-    private static ToggleButton tb = null;
+    public static ToggleButton tb = null;
     private UnlockReceiver unlockReceiver = null;
 
     private String SENSITIVITY_PREFERENCE;
