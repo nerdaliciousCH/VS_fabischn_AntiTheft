@@ -3,6 +3,7 @@ package ch.ethz.inf.vs.a1.fabischn.antitheft;
 import android.content.Context;
 import android.content.Intent;
 import android.icu.text.LocaleDisplayNames;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,9 +23,6 @@ public class SettingsActivity extends AppCompatActivity {
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
-        int sens = getPreferences(getApplicationContext().MODE_PRIVATE).getInt("Sensitivity", 4);
-
-        Log.d("SENSITIFITI is", sens + "");
     }
 
     @Override
@@ -38,16 +36,20 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        int sensitivityOnExit = getPreferences(Context.MODE_PRIVATE).getInt("Sensitivity", 2);
-        int delayOnExit = getPreferences(Context.MODE_PRIVATE).getInt("Delay Time", 2);
-       // if (sensitivityOnExit == sensitivityOnExit && delayOnEntry == delayOnExit) {
+        int sensitivityOnExit = PreferenceManager.getDefaultSharedPreferences(this).getInt(getString(R.string.pref_sensitivity), 5);
+        int delayOnExit = PreferenceManager.getDefaultSharedPreferences(this).getInt(getString(R.string.pref_delay), 5);
+
+
+        Log.d("Sensitivity " + sensitivityOnEntry, sensitivityOnExit + "");
+        Log.d("Delay "  + delayOnEntry, delayOnExit + "");
+        if (sensitivityOnEntry == sensitivityOnExit && delayOnEntry == delayOnExit) {
             Context context = getApplicationContext();
             CharSequence text = "Nothing has changed.";
             int duration = Toast.LENGTH_SHORT;
 
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();
-       // }
+        }
         Log.d("Back Pressed", "!!!!!");
 
     }

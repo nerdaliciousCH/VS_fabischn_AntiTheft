@@ -4,5 +4,14 @@
     <string name="toggle_deactivate">Deactivate</string>
     <string name="pref_sensitivity">Sensitivity</string>
     <string name="pref_delay">Delay Time</string>
+    <string name="pref_movement_detector">Movement Detector></string>
     <string name="menu_settings">Settings</string>
+    <string name="list_item_spike">Spike Movement Detector</string>
+    <string name="list_item_alt">Alternative Movement Detector</string>
+
+    <string-array name="movement_detector_list">
+        <item>@string/list_item_spike</item>
+        <item>@string/list_item_alt</item>
+    </string-array>
+
 </resources>

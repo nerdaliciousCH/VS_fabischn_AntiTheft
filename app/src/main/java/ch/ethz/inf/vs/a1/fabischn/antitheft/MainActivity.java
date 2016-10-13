@@ -30,15 +30,18 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     private String SENSITIVITY_PREFERENCE;
     private String DELAY_PREFERENCE;
+    private String MOVEMENT_DETECTOR_PREFERENCE;
 
-    private int sensitivity = 10;
-    private int delay = 0;
+    private static int sensitivity = 10;
+    private static int delay = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.SENSITIVITY_PREFERENCE = getResources().getString(R.string.pref_sensitivity);
         this.DELAY_PREFERENCE = getResources().getString(R.string.pref_delay);
+        this.MOVEMENT_DETECTOR_PREFERENCE = getResources().getString(R.string.pref_movement_detector);
 
         setContentView(R.layout.activity_main);
         unlockReceiver = new UnlockReceiver();
@@ -136,8 +139,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             this.delay = sharedPref.getInt(key, 10);
             Log.d("Delay Time is:", this.delay + "");
         }
-        //restartService();
-
+        else if (key.equals(this.MOVEMENT_DETECTOR_PREFERENCE)) {
+            
+        }
     }
 
     @Override

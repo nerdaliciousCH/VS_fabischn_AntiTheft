@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <ListPreference
+        android:key="@string/pref_movement_detector"
+        android:title="@string/pref_movement_detector"
+        android:entries="@array/movement_detector_list"
+        android:entryValues="@array/movement_detector_list"
+        android:defaultValue="@string/list_item_spike"/>
     <ch.ethz.inf.vs.a1.fabischn.antitheft.SeekbarPreference
         android:key="@string/pref_sensitivity"
         android:title="@string/pref_sensitivity"
@@ -9,4 +14,5 @@
         android:key="@string/pref_delay"
         android:title="@string/pref_delay"
         android:defaultValue="2"/>
+
 </PreferenceScreen>
