@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         tb.setChecked(b);
     }
 
-    //Most Recent COmmig
+
 
     private static ToggleButton tb = null;
     private UnlockReceiver unlockReceiver = null;
@@ -78,20 +78,19 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         // Register UnlockReceiver and PreferenceListener
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
         registerReceiver(unlockReceiver, new IntentFilter("android.intent.action.USER_PRESENT"));
-
-
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(this.unlockReceiver);        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
+        unregisterReceiver(this.unlockReceiver);
 
     }
 
     public void onClickToggle (View v) {
         this.movementDetector = PreferenceManager.getDefaultSharedPreferences(this).getString(this.MOVEMENT_DETECTOR_PREFERENCE, "Bla");
 
+        // create Intent and pass the current preference-values
         Intent intent = new Intent(this, AntiTheftService.class);
         intent.putExtra(this.SENSITIVITY_PREFERENCE, this.sensitivity);
         intent.putExtra(this.DELAY_PREFERENCE, this.delay);
@@ -100,11 +99,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
 
         if (tb.isChecked()) {
+            // Start the service and set the ToggleButton text accordingly
             AntiTheftService.setRunning(true);
             startService(intent);
             tb.setText(R.string.toggle_deactivate);
         }
         else {
+            //Unset the 'running' flag of the service s.t. it can terminate successfully.
             AntiTheftService.setRunning(false);
             tb.setText(R.string.toggle_activate);
         }
@@ -115,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        //Create OptionsMenu according to XML-layout
         getMenuInflater().inflate(R.menu.menu_actuators, menu);
         return true;
     }
@@ -123,8 +125,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public boolean onOptionsItemSelected(MenuItem item) {
 
         Intent intent = new Intent(this, SettingsActivity.class);
-        intent.putExtra("name", "Olivier");
-
+        /*Fetch current preference values and pass them to the SettingsActivity,
+        * The SettingsActivity can use these values to detect whether the user changed
+        * any settings. If not it will inform the user by a TOAST that no settings were
+        * changed after resuming from ActititySettings*/
         switch (item.getItemId()) {
             case R.id.menu_settings:
                 intent.putExtra("SensitivityOnEntry", this.sensitivity);
