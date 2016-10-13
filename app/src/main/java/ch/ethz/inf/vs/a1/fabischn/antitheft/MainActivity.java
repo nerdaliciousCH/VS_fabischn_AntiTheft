@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         tb.setChecked(b);
     }
 
+
+
     private static ToggleButton tb = null;
     private UnlockReceiver unlockReceiver = null;
 
@@ -45,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         this.delay       = PreferenceManager.getDefaultSharedPreferences(this).getInt(this.DELAY_PREFERENCE, 2);
         PreferenceManager.getDefaultSharedPreferences(this)
                 .registerOnSharedPreferenceChangeListener(this);
+        tb = (ToggleButton) findViewById(R.id.btn_toggle);
+        Log.d("!!!!", "onCreate: ");
 
 
 
@@ -53,6 +57,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     protected void onResume() {
         super.onResume();
+
+        Log.d("!!!!!", "onResume: ");
+        if (tb.isChecked()) {
+            tb.setText(R.string.toggle_deactivate);
+        }
+        else {
+            tb.setText(R.string.toggle_activate);
+        }
         registerReceiver(unlockReceiver, new IntentFilter("android.intent.action.USER_PRESENT"));
 
 
@@ -62,11 +74,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     protected void onPause() {
         super.onPause();
         unregisterReceiver(this.unlockReceiver);
-        //PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
     }
 
     public void onClickToggle (View v) {
-        tb = (ToggleButton) v;
+       // tb = (ToggleButton) v;
 
         Intent intent = new Intent(this, AntiTheftService.class);
         intent.putExtra(this.SENSITIVITY_PREFERENCE, this.sensitivity);
@@ -125,6 +136,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             Log.d("Delay Time is:", this.delay + "");
         }
         //restartService();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
+
 
     }
 }
