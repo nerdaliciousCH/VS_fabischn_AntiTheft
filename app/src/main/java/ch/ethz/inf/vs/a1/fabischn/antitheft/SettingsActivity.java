@@ -13,6 +13,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     int sensitivityOnEntry;
     int delayOnEntry;
+    String movementDetectorOnEntry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +21,7 @@ public class SettingsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         this.sensitivityOnEntry = intent.getIntExtra("SensitivityOnEntry", 10);
         this.delayOnEntry = intent.getIntExtra("DelayOnEntry", 2);
+        this.movementDetectorOnEntry = intent.getStringExtra("MovementDetectorOnEntry");
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();

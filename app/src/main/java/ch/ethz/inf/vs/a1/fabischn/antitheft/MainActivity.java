@@ -82,12 +82,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     public void onClickToggle (View v) {
        // tb = (ToggleButton) v;
-        String movementDetector = PreferenceManager.getDefaultSharedPreferences(this).getString(this.MOVEMENT_DETECTOR_PREFERENCE, "Bla");
+        this.movementDetector = PreferenceManager.getDefaultSharedPreferences(this).getString(this.MOVEMENT_DETECTOR_PREFERENCE, "Bla");
 
         Intent intent = new Intent(this, AntiTheftService.class);
         intent.putExtra(this.SENSITIVITY_PREFERENCE, this.sensitivity);
         intent.putExtra(this.DELAY_PREFERENCE, this.delay);
-        intent.putExtra(this.MOVEMENT_DETECTOR_PREFERENCE, movementDetector);
+        intent.putExtra(this.MOVEMENT_DETECTOR_PREFERENCE, this.movementDetector);
 
 
 
@@ -121,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             case R.id.menu_settings:
                 intent.putExtra("SensitivityOnEntry", this.sensitivity);
                 intent.putExtra("DelayOnEntry", this.delay);
+                intent.putExtra("MovementDetectorOnEntry", this.movementDetector);
                 this.startActivity(intent);
                 return true;
             default:
@@ -135,8 +136,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         if (key.equals(this.SENSITIVITY_PREFERENCE)) {
             this.sensitivity = sharedPref.getInt(key, 10);
             Log.d("Sensitivity is:", this.sensitivity + "");
-            if (AntiTheftService.amd != null && AntiTheftService.amd instanceof SpikeMovementDetector) {
-                //AntiTheftService.spike.setThreshFromSensitivity(this.sensitivity);
+            if (AntiTheftService.amd != null ) {
+                AntiTheftService.amd.setThreshFromSensitivity(this.sensitivity);
             }
         }
         else if (key.equals(this.DELAY_PREFERENCE)) {

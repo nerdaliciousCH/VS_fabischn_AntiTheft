@@ -10,6 +10,7 @@ public abstract class AbstractMovementDetector implements SensorEventListener {
 
     protected AlarmCallback callback;
     protected int sensitivity;
+    protected int thresh = 0;
 
     public AbstractMovementDetector(AlarmCallback callback, int sensitivity){
         this.callback = callback;
@@ -26,6 +27,10 @@ public abstract class AbstractMovementDetector implements SensorEventListener {
                 callback.onDelayStarted();
             }
         }
+    }
+
+    public synchronized void setThreshFromSensitivity(int sens) {
+        this.thresh = SeekbarPreference.getSeekbarMaxValue() - sens;
     }
 
     @Override
