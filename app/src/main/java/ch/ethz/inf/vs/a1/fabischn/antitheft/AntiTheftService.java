@@ -25,10 +25,12 @@ public class AntiTheftService extends IntentService implements  AlarmCallback {
     }
 
     public static SpikeMovementDetector spike = null;
+    public static AbstractMovementDetector amd;
     private SensorManager sensorManager = null;
     private MediaPlayer mp = null;
     private int sensitivity = 10;
     private int delay = 0;
+    private String movementDetector;
 
     public static synchronized boolean isRunning() {
         return running;
@@ -67,11 +69,20 @@ public class AntiTheftService extends IntentService implements  AlarmCallback {
     protected void onHandleIntent(Intent intent) {
         this.sensitivity = intent.getIntExtra(getResources().getString(R.string.pref_sensitivity), 10);
         this.delay       = intent.getIntExtra(getResources().getString(R.string.pref_delay), 0);
+        this.movementDetector = intent.getStringExtra(getResources().getString(R.string.pref_movement_detector));
 
-        spike = new SpikeMovementDetector(this, this.sensitivity);
+
+
+        if (this.movementDetector.equals(getResources().getString(R.string.list_item_spike))) {
+            amd = new SpikeMovementDetector(this, this.sensitivity);
+        }
+        else if (this.movementDetector.equals(getResources().getString(R.string.list_item_alt))) {
+            amd = new AlternativeMovementDetector(this, this.sensitivity);
+        }
+
         sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         Sensor accSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
-        sensorManager.registerListener(spike, accSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(amd, accSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
         Log.d("Service", "Start");
 
@@ -93,7 +104,7 @@ public class AntiTheftService extends IntentService implements  AlarmCallback {
         notificationManager.cancel(TAG, NOTIFICATION_ID);
         Log.d("Service", "Stop");
 
-        sensorManager.unregisterListener(spike);
+        sensorManager.unregisterListener(amd);
     }
 
     @Override
