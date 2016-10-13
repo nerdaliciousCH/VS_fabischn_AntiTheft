@@ -25,34 +25,40 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
 
 
-    public static ToggleButton tb = null;
+    private static ToggleButton tb = null;
     private UnlockReceiver unlockReceiver = null;
 
+    // preference-tags
     private String SENSITIVITY_PREFERENCE;
     private String DELAY_PREFERENCE;
     private String MOVEMENT_DETECTOR_PREFERENCE;
 
-    private int sensitivity = 10;
-    private int delay = 0;
+    private int sensitivity;
+    private int delay;
     private String movementDetector;
 
+
+    public static ToggleButton getToggleButton() {
+        return tb;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        //initialize preference-tags
         this.SENSITIVITY_PREFERENCE = getResources().getString(R.string.pref_sensitivity);
         this.DELAY_PREFERENCE = getResources().getString(R.string.pref_delay);
         this.MOVEMENT_DETECTOR_PREFERENCE = getResources().getString(R.string.pref_movement_detector);
 
-        setContentView(R.layout.activity_main);
         unlockReceiver = new UnlockReceiver();
-        registerReceiver(unlockReceiver, new IntentFilter("android.intent.action.USER_PRESENT"));
+
+        // Fetch current sensitivity and delay preference values and initialize togglebutton
         this.sensitivity = PreferenceManager.getDefaultSharedPreferences(this).getInt(this.SENSITIVITY_PREFERENCE, 5);
         this.delay       = PreferenceManager.getDefaultSharedPreferences(this).getInt(this.DELAY_PREFERENCE, 2);
-        PreferenceManager.getDefaultSharedPreferences(this)
-                .registerOnSharedPreferenceChangeListener(this);
+
         tb = (ToggleButton) findViewById(R.id.btn_toggle);
-        Log.d("!!!!", "onCreate: ");
 
 
 
@@ -62,13 +68,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     protected void onResume() {
         super.onResume();
 
-        Log.d("!!!!!", "onResume: ");
+        // Display useful text of ToggleButton
         if (tb.isChecked()) {
             tb.setText(R.string.toggle_deactivate);
         }
         else {
             tb.setText(R.string.toggle_activate);
         }
+        // Register UnlockReceiver and PreferenceListener
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
         registerReceiver(unlockReceiver, new IntentFilter("android.intent.action.USER_PRESENT"));
 
 
@@ -77,11 +85,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(this.unlockReceiver);
+        unregisterReceiver(this.unlockReceiver);        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
+
     }
 
     public void onClickToggle (View v) {
-       // tb = (ToggleButton) v;
         this.movementDetector = PreferenceManager.getDefaultSharedPreferences(this).getString(this.MOVEMENT_DETECTOR_PREFERENCE, "Bla");
 
         Intent intent = new Intent(this, AntiTheftService.class);

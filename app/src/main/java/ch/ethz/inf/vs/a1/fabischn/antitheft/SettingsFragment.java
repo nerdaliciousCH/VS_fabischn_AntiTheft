@@ -28,7 +28,7 @@ public class SettingsFragment extends PreferenceFragment {
         movement_pref      = (ListPreference)    findPreference(movementDet);
 
         sensitivity_pref.setDescription(sensitivity + ":");
-        delay_pref.setDescription(delay + ":");
+        delay_pref.setDescription(delay + " (s):");
     }
 
 
