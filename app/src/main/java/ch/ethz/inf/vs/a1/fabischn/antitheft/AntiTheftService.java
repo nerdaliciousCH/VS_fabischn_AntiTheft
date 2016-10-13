@@ -118,7 +118,6 @@ public class AntiTheftService extends IntentService implements  AlarmCallback {
             }
         }, this.delay * 1000);
 
-
     }
 
 

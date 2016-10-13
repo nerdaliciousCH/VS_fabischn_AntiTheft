@@ -13,6 +13,7 @@ public abstract class AbstractMovementDetector implements SensorEventListener {
     protected int thresh = 0;
 
     public AbstractMovementDetector(AlarmCallback callback, int sensitivity){
+        this.thresh = SeekbarPreference.getSeekbarMaxValue() - sensitivity;
         this.callback = callback;
         this.sensitivity = sensitivity;
     }

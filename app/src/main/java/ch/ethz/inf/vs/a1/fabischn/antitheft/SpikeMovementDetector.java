@@ -7,12 +7,8 @@ import ch.ethz.inf.vs.a1.fabischn.antitheft.AlarmCallback;
 public class SpikeMovementDetector extends AbstractMovementDetector {
 
 
-
-
-
     public SpikeMovementDetector(AlarmCallback callback, int sensitivity) {
         super(callback, sensitivity);
-        this.thresh = SeekbarPreference.getSeekbarMaxValue() - sensitivity;
     }
 
     @Override
